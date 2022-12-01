@@ -1,4 +1,4 @@
-{ lib, crystal, fetchFromGitHub, fetchurl, jq, bash }:
+{ lib, crystal, fetchFromGitHub, fetchurl, jq, bash, fzf, fd, bat, ripgrep }:
 let
   icon = fetchurl {
     url = "https://github.com/mawww/kakoune/raw/master/doc/kakoune_logo.svg";
@@ -34,6 +34,12 @@ crystal.buildCrystalPackage rec {
     install -Dm444 share/kcr/applications/kcr.desktop -t $out/share/applications
     install -Dm444 ${icon} $out/share/icons/hicolor/scalable/apps/kcr.svg
     cp -r share/kcr $out/share/
+  '';
+
+  postFixup = ''
+    sed -i '1a\
+    export PATH="${lib.makeBinPath [fzf fd bat ripgrep]}:$PATH"' \
+      $out/bin/kcr-fzf-*
   '';
 
   installCheckPhase = ''
