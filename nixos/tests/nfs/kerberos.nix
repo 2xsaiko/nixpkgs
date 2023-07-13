@@ -1,17 +1,17 @@
 import ../make-test-python.nix ({ pkgs, lib, ... }:
 
 let
-  krb5 =
-    { enable = true;
-      settings = {
-        domain_realm."nfs.test"   = "NFS.TEST";
-        libdefaults.default_realm = "NFS.TEST";
-        realms."NFS.TEST" =
-          { admin_server = "server.nfs.test";
-            kdc = "server.nfs.test";
-          };
+  krb5 = {
+    enable = true;
+    settings = {
+      domain_realm."nfs.test" = "NFS.TEST";
+      libdefaults.default_realm = "NFS.TEST";
+      realms."NFS.TEST" = {
+        admin_server = "server.nfs.test";
+        kdc = "server.nfs.test";
       };
     };
+  };
 
   hosts =
     ''

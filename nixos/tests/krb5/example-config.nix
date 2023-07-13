@@ -47,11 +47,7 @@ import ../make-test-python.nix ({ pkgs, ...} : {
               initial_timeout = 1;
             };
           };
-          plugins = {
-            ccselect = {
-              disable = "k5identity";
-            };
-          };
+          plugins.ccselect.disable = "k5identity";
           logging = {
             kdc = "SYSLOG:NOTICE";
             admin_server = "SYSLOG:NOTICE";

@@ -48,10 +48,6 @@ let
     The option `krb5.${name}' has been removed. Use `krb5.settings.${name}' for
     structured configuration or `krb5.extraConfig' for plain-text configuration.
   '';
-  mkRemovedOptionModuleVeryOld = name: replacement: mkRemovedOptionModule' name ''
-    The option `krb5.${name}' has been removed. Replace it with
-    `krb5.settings.${replacement}' according to krb5.conf(5).
-  '';
 
   cfg = config.krb5;
 in {
@@ -67,13 +63,7 @@ in {
       structured configuration or `krb5.extraConfig' for plain-text
       configuration.
     '')
-    (mkRemovedOptionModuleVeryOld "defaultRealm" "libdefaults.default_realm")
-    (mkRemovedOptionModuleVeryOld "domainRealm" "domain_realm")
-    (mkRemovedOptionModuleVeryOld "kdc" "realms.*.kdc")
-    (mkRemovedOptionModuleVeryOld "kerberosAdminServer" "realms.*.admin_server")
   ];
-
-  ###### interface
 
   options = {
     krb5 = {
@@ -114,34 +104,7 @@ in {
             };
 
             domain_realm = {
-              "example.com" = "EXAMPLE.COM";
-              ".example.com" = "EXAMPLE.COM";
-            };
-
-            capaths = {
-              "ATHENA.MIT.EDU" = {
-                "EXAMPLE.COM" = ".";
-              };
-              "EXAMPLE.COM" = {
-                "ATHENA.MIT.EDU" = ".";
-              };
-            };
-
-            appdefaults = {
-              pam = {
-                debug = false;
-                ticket_lifetime = 36000;
-                renew_lifetime = 36000;
-                max_timeout = 30;
-                timeout_shift = 2;
-                initial_timeout = 1;
-              };
-            };
-
-            plugins = {
-              ccselect = {
-                disable = "k5identity";
-              };
+              "mit.edu" = "ATHENA.MIT.EDU";
             };
 
             logging = {
@@ -170,11 +133,9 @@ in {
     };
   };
 
-  ###### implementation
-
   config = mkIf cfg.enable {
     environment = {
-      systemPackages = [cfg.kerberos];
+      systemPackages = [ cfg.kerberos ];
       etc."krb5.conf".text = cfg.extraConfig;
     };
 
