@@ -77,7 +77,7 @@ in {
 
   options = {
     krb5 = {
-      enable = mkEnableOption (lib.mdDoc "building krb5.conf, configuration file for Kerberos V");
+      enable = mkEnableOption (mdDoc "building krb5.conf, configuration file for Kerberos V");
 
       kerberos = mkOption {
         type = types.package;
@@ -157,7 +157,7 @@ in {
             admin_server = SYSLOG:NOTICE
             default      = SYSLOG:NOTICE
         '';
-        description = lib.mdDoc ''
+        description = mdDoc ''
           These lines go to the end of `krb5.conf` verbatim.
           `krb5.conf` may include any of the relations that are
           valid for `kdc.conf` (see `man kdc.conf`),
