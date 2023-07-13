@@ -2,7 +2,7 @@
 let
   inherit (lib) concatMapStringsSep concatStringsSep isAttrs isInt isList
     isString literalExpression mapAttrsToList mdDoc mkEnableOption mkIf
-    mkOption mkRemovedOptionModule types;
+    mkOption mkOrder mkRemovedOptionModule types;
   inherit (lib.types) attrsOf bool either int lines listOf oneOf str;
 
   prefixStringLines = prefix: str:
@@ -178,6 +178,7 @@ in {
       etc."krb5.conf".text = cfg.extraConfig;
     };
 
-    krb5.extraConfig = formatToplevel cfg.settings;
+    # Put between mkBefore and default priority
+    krb5.extraConfig = mkOrder 750 (formatToplevel cfg.settings);
   };
 }
