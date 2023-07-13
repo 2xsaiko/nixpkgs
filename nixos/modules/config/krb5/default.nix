@@ -24,24 +24,25 @@ let
     if isAttrs relation
     then ''
       ${name} = {
-      ${indent (concatStringsSep "\n" (mapAttrsToList formatValues relation))}
+      ${indent (concatStringsSep "\n" (mapAttrsToList formatValue relation))}
       }''
-    else formatValues name relation;
-  formatValues = name: value:
+    else formatValue name relation;
+  formatValue = name: value:
     if isList value
-    then concatMapStringsSep "\n" (formatValue name) value
-    else formatValue name value;
-  formatValue = name: value: "${name} = ${formatAtom value}";
-  formatAtom = atom:
-    if atom == true
-    then "true"
-    else if atom == false
-    then "false"
-    else if isInt atom
-    then toString atom
-    else if isString atom
-    then atom
-    else throw "unreachable";
+    then concatMapStringsSep "\n" (formatAtom name) value
+    else formatAtom name value;
+  formatAtom = name: atom: let
+    v =
+      if atom == true
+      then "true"
+      else if atom == false
+      then "false"
+      else if isInt atom
+      then toString atom
+      else if isString atom
+      then atom
+      else throw "unreachable";
+  in "${name} = ${v}";
 
   mkRemovedOptionModule' = name: reason: mkRemovedOptionModule ["krb5" name] reason;
   mkRemovedOptionModuleCfg = name: mkRemovedOptionModule' name ''
