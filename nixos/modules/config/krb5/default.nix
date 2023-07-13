@@ -143,6 +143,12 @@ in {
                 disable = "k5identity";
               };
             };
+
+            logging = {
+              kdc = "SYSLOG:NOTICE";
+              admin_server = "SYSLOG:NOTICE";
+              default = "SYSLOG:NOTICE";
+            };
           }
         '';
         type = toplevel;
@@ -152,10 +158,7 @@ in {
         type = lines;
         default = "";
         example = ''
-          [logging]
-            kdc          = SYSLOG:NOTICE
-            admin_server = SYSLOG:NOTICE
-            default      = SYSLOG:NOTICE
+          includedir /etc/krb5.conf.d
         '';
         description = mdDoc ''
           These lines go to the end of `krb5.conf` verbatim.
