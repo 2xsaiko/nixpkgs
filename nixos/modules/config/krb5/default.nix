@@ -24,14 +24,14 @@ let
     if isAttrs relation
     then ''
       ${name} = {
-      ${indent (concatStringsSep "\n" (mapAttrsToList formatValue relation))}
-      }
-    ''
-    else formatValue name relation;
-  formatValue = name: value:
+      ${indent (concatStringsSep "\n" (mapAttrsToList formatValues relation))}
+      }''
+    else formatValues name relation;
+  formatValues = name: value:
     if isList value
-    then "${name} = ${concatMapStringsSep " " formatAtom value}"
-    else "${name} = ${formatAtom value}";
+    then concatMapStringsSep "\n" (formatValue name) value
+    else formatValue name value;
+  formatValue = name: value: "${name} = ${formatAtom value}";
   formatAtom = atom:
     if atom == true
     then "true"
