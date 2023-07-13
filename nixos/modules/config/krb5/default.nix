@@ -58,6 +58,7 @@ in {
   imports = [
     (mkRemovedOptionModuleCfg "libdefaults")
     (mkRemovedOptionModuleCfg "realms")
+    (mkRemovedOptionModuleCfg "domain_realm")
     (mkRemovedOptionModuleCfg "capaths")
     (mkRemovedOptionModuleCfg "appdefaults")
     (mkRemovedOptionModuleCfg "plugins")
