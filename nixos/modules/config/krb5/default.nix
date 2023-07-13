@@ -15,24 +15,24 @@ let
   value = either (listOf atom) atom;
   atom = oneOf [int str bool];
 
-  mkToplevel = toplevel: concatStringsSep "\n" (mapAttrsToList mkSection toplevel);
-  mkSection = name: section: ''
+  formatToplevel = toplevel: concatStringsSep "\n" (mapAttrsToList formatSection toplevel);
+  formatSection = name: section: ''
     [${name}]
-    ${indent (concatStringsSep "\n" (mapAttrsToList mkRelation section))}
+    ${indent (concatStringsSep "\n" (mapAttrsToList formatRelation section))}
   '';
-  mkRelation = name: relation:
+  formatRelation = name: relation:
     if isAttrs relation
     then ''
       ${name} = {
-      ${indent (concatStringsSep "\n" (mapAttrsToList mkValue relation))}
+      ${indent (concatStringsSep "\n" (mapAttrsToList formatValue relation))}
       }
     ''
-    else mkValue name relation;
-  mkValue = name: value:
+    else formatValue name relation;
+  formatValue = name: value:
     if isList value
-    then "${name} = ${concatMapStringsSep " " mkAtom value}"
-    else "${name} = ${mkAtom value}";
-  mkAtom = atom:
+    then "${name} = ${concatMapStringsSep " " formatAtom value}"
+    else "${name} = ${formatAtom value}";
+  formatAtom = atom:
     if atom == true
     then "true"
     else if atom == false
@@ -174,6 +174,6 @@ in {
       etc."krb5.conf".text = cfg.extraConfig;
     };
 
-    krb5.extraConfig = mkToplevel cfg.settings;
+    krb5.extraConfig = formatToplevel cfg.settings;
   };
 }
