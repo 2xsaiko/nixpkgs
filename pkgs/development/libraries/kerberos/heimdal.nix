@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, python3, perl, bison, flex
 , texinfo, perlPackages
-, openldap, libcap_ng, sqlite, openssl, db, libedit, pam
+, openldap, libcap_ng, sqlite, openssl, db, libedit, pam, libxcrypt
 , CoreFoundation, Security, SystemConfiguration
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config python3 perl bison flex texinfo ]
     ++ (with perlPackages; [ JSON ]);
-  buildInputs = lib.optionals (stdenv.isLinux) [ libcap_ng ]
+  buildInputs = lib.optionals (stdenv.isLinux) [ libcap_ng libxcrypt ]
     ++ [ db sqlite openssl libedit openldap pam]
     ++ lib.optionals (stdenv.isDarwin) [ CoreFoundation Security SystemConfiguration ];
 
