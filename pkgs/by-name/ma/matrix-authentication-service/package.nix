@@ -12,6 +12,7 @@
   stdenv,
   open-policy-agent,
   cctools,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -82,6 +83,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -r templates   "$out/share/$pname/templates"
     cp -r translations   "$out/share/$pname/translations"
   '';
+
+  passthru = {
+    tests = { inherit (nixosTests) matrix-authentication-service; };
+  };
 
   meta = {
     description = "OAuth2.0 + OpenID Provider for Matrix Homeservers";
