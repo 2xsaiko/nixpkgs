@@ -1,11 +1,11 @@
 { lib
-, stdenv
+, clangStdenv
 , fetchurl
 , which
 , libobjc
 }:
 
-stdenv.mkDerivation (self: {
+clangStdenv.mkDerivation (self: {
   pname = "gnustep-make";
   version = "2.9.1";
 

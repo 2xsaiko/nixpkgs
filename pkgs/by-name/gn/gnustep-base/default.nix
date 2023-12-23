@@ -1,8 +1,8 @@
 { lib
-, stdenv
+, clangStdenv
 , aspell
 , audiofile
-, make
+, gnustep-make
 , wrapGNUstepAppsHook
 , cups
 , fetchzip
@@ -26,7 +26,7 @@
 , libiberty
 }:
 
-stdenv.mkDerivation (self: {
+clangStdenv.mkDerivation (self: {
   pname = "gnustep-base";
   version = "1.29.0";
   src = fetchzip {
@@ -34,7 +34,7 @@ stdenv.mkDerivation (self: {
     hash = "sha256-4fjdsLBsYEDxLOFrq17dKii2sLKvOaFCu0cw3qQtM5U=";
   };
   outputs = [ "out" "dev" "lib" ];
-  nativeBuildInputs = [ pkg-config make wrapGNUstepAppsHook ];
+  nativeBuildInputs = [ pkg-config gnustep-make wrapGNUstepAppsHook ];
   propagatedBuildInputs = [
     aspell audiofile
     cups
