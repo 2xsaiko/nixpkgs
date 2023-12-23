@@ -1,12 +1,12 @@
 { lib
-, stdenv
-, make
+, clangStdenv
+, gnustep-make
 , wrapGNUstepAppsHook
 , fetchzip
-, base
+, gnustep-base
 }:
 
-stdenv.mkDerivation (self: {
+clangStdenv.mkDerivation (self: {
   version = "0.30.0";
   pname = "gnustep-gui";
 
@@ -15,12 +15,13 @@ stdenv.mkDerivation (self: {
     sha256 = "sha256-24hL4TeIY6izlhQUcxKI0nXITysAPfRrncRqsDm2zNk=";
   };
 
-  nativeBuildInputs = [ make wrapGNUstepAppsHook ];
-  buildInputs = [ base ];
+  nativeBuildInputs = [ gnustep-make wrapGNUstepAppsHook ];
+  buildInputs = [ gnustep-base ];
 
   patches = [
     ./fixup-all.patch
   ];
+
   meta = {
     changelog = "https://github.com/gnustep/libs-gui/releases/tag/gui-${builtins.replaceStrings [ "." ] [ "_" ] self.version}";
     description = "A GUI class library of GNUstep";

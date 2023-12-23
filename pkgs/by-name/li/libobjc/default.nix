@@ -1,11 +1,11 @@
 { lib
-, stdenv
+, clangStdenv
 , fetchFromGitHub
 , cmake
 }:
 
-stdenv.mkDerivation (self: {
-  pname = "libobjc2";
+clangStdenv.mkDerivation (self: {
+  pname = "libobjc";
   version = "2.1";
 
   src = fetchFromGitHub {
