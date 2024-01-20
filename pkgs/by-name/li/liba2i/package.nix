@@ -25,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "DESTDIR=${placeholder "out"}"
     "prefix=/usr"
+    "V=1"
   ];
 
   nativeBuildInputs = [
