@@ -20,6 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace '.SHELLFLAGS := -S bash -Eeuo pipefail -c' ""
     substituteInPlace share/mk/build-deps.mk \
       --replace 'DEFAULT_CFLAGS += -Werror' ""
+    substituteInPlace share/mk/*.mk \
+      --replace 'g 0 1 2 s 3 fast' ""
   '';
 
   makeFlags = [
@@ -32,9 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   outputs = [ "out" "dev" ];
-
-  # Overriding EXTRA_CFLAGS doesn't change anything, so I had to use this.
-  env.NIX_CFLAGS_COMPILE = "-O3";
 
   meta = {
     description = "Library to parse numbers from strings";
