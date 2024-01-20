@@ -23,8 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   makeFlags = [
-    "DESTDIR=${placeholder "out"}"
-    "prefix=/usr"
+    "prefix=${placeholder "out"}"
     "V=1"
   ];
 
