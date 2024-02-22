@@ -40,6 +40,9 @@ let
     unique
   ;
 
+  makeFormattable = lib.filterAttrsRecursive (_: v: !(builtins.isFunction v));
+  formatDrvInfo = name: args': builtins.trace "drv: ${name}" (let args = makeFormattable (builtins.removeAttrs args' ["__toString"]); in "derivation(${builtins.toFile "${name}.drv-info" (builtins.unsafeDiscardStringContext (builtins.toJSON args))})");
+
   checkMeta = import ./check-meta.nix {
     inherit lib config;
     # Nix itself uses the `system` field of a derivation to decide where
@@ -342,6 +345,7 @@ else let
   derivationArg =
     (removeAttrs attrs
       (["meta" "passthru" "pos"
+       "__toString" "__drvInfo"
        "checkInputs" "installCheckInputs"
        "nativeCheckInputs" "nativeInstallCheckInputs"
        "__contentAddressed"
@@ -594,6 +598,8 @@ extendDerivation
 
      inherit passthru overrideAttrs;
      inherit meta;
+     __toString = self: self.__drvInfo;
+     __drvInfo = formatDrvInfo derivationArg.name ({inherit meta;}//derivationArg);
    } //
    # Pass through extra attributes that are not inputs, but
    # should be made available to Nix expressions using the
