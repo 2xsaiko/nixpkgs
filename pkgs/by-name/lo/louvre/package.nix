@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -31,6 +32,17 @@ stdenv.mkDerivation (self: {
     owner = "CuarzoSoftware";
     repo = "Louvre";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/CuarzoSoftware/Louvre/commit/9f85092372ee7f16962fe1e5df4a4ea32d7876a0.patch";
+      hash = "sha256-9o+rknw+Wd7+QrX/Kx6Q6PU7HgZEk9hRlVWN15X8TDA=";
+    })
+    (fetchpatch {
+      url = "https://github.com/CuarzoSoftware/Louvre/commit/d3d8715ad7914237644a2e4cc89f888a283e17c7.patch";
+      hash = "sha256-h2TlPRWRUyOIpTg5a8lAHdR3vGr81NzoRKpVrgJw2d4=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
