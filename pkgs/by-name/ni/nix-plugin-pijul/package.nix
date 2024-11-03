@@ -17,11 +17,11 @@
 let nix = if nixOverride != null then nixOverride else nixVersions.nix_2_18;
 in stdenv.mkDerivation (finalAttrs: {
   pname = "nix-plugin-pijul";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchzip {
     url = "https://dblsaiko.net/pub/nix-plugin-pijul/nix-plugin-pijul-${finalAttrs.version}.tar.gz";
-    hash = "sha256-X25tFqcAgNWmkMxbfXGx8KJ25BV6sFWAQM9NvjQeSmQ=";
+    hash = "sha256-1BJZ0lv7XDgT/AiXmJ2Z5Jn0tEa1Yerp9YYcjVCHqoI=";
   };
 
   nativeBuildInputs = [
