@@ -11187,7 +11187,6 @@ with pkgs;
 
   dodgy = with python3Packages; toPythonApplication dodgy;
 
-  dovecot = callPackage ../servers/mail/dovecot { };
   envoy = callPackage ../by-name/en/envoy/package.nix {
     jdk = openjdk11_headless;
   };
