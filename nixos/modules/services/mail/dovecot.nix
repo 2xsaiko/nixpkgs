@@ -122,18 +122,8 @@ let
     else if isAttrs v then
       let
         nSplit = splitString " " n;
-        sectionType =
-          # section.type or part before space in $n
-          if (hasAttr "section" v) then
-            if (hasAttr "type" v.section) then v.section.type else (elemAt nSplit 0)
-          else
-            (elemAt nSplit 0);
-        sectionName =
-          # section.name, part after space in $n, or unnamed
-          if (hasAttr "section" v) && (hasAttr "name" v.section) then
-            v.section.name
-          else
-            (if (length nSplit == 2) then (elemAt nSplit 1) else "");
+        sectionType = v.section.type;
+        sectionName = v.section.name;
       in
       concatStringsSep "\n" (
         [ "${indent}${sectionType} ${sectionName}${if sectionName != "" then " " else ""}{" ]
@@ -285,27 +275,42 @@ in
 
     settings = mkOption {
       default = { };
-      type = lib.types.submodule {
-        freeformType =
-          with lib.types;
-          let
-            atom = [
-              int
-              str
-              bool
-              (lazyAttrsOf settingsType)
-            ];
-            settingsType = nullOr (
-              oneOf (
-                atom
-                ++ [
-                  (listOf (oneOf atom))
-                ]
-              )
-            );
-          in
-          settingsType;
-      };
+      type = let
+        inherit (lib.types) attrsOf bool int listOf nullOr oneOf str submodule;
+        inherit (lib) elemAt singleton split;
+
+        atom = oneOf [int str bool];
+
+        section = submodule ({name, config, ...}: let
+          # I hate regex but I can't find a "split once" function at a glance.
+          # Feel free to replace
+          splits = elemAt (elemAt (split "^([^ ]+)( +(.+))?$" name) 1);
+          typeDefault = splits 0;
+          nameDefault = splits 2;
+        in {
+          options = {
+            section = {
+              type = mkOption {
+                description = "...";
+                type = str;
+                default = typeDefault;
+              };
+
+              name = mkOption {
+                description = "...";
+                type = nullOr str;
+                default = nameDefault;
+              };
+            };
+          };
+
+          freeformType = configValueType;
+        });
+
+        any = oneOf [atom section];
+
+        configValueType = oneOf [any (listOf any)];
+      in attrsOf configValueType;
       description = ''
         Dovecot configuration, see <https://doc.dovecot.org/2.4.0/core/summaries/settings.html#all-dovecot-settings>
         for all available options.
