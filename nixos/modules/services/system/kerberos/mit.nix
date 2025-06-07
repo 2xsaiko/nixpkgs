@@ -2,11 +2,13 @@
   pkgs,
   config,
   lib,
+  utils,
   ...
 }:
 
 let
   inherit (lib) mapAttrs;
+  inherit (utils) escapeSystemdExecArgs;
   cfg = config.services.kerberos_server;
   package = config.security.krb5.package;
   PIDFile = "/run/kdc.pid";
@@ -91,7 +93,15 @@ in
       serviceConfig = {
         Type = "forking";
         PIDFile = PIDFile;
-        ExecStart = "${package}/bin/krb5kdc -P ${PIDFile}";
+        ExecStart = escapeSystemdExecArgs (
+          [
+            "${package}/bin/krb5kdc"
+            "-P"
+            "${PIDFile}"
+            "--config-file=/etc/heimdal-kdc/kdc.conf"
+          ]
+          ++ cfg.extraKDCArgs
+        );
         Slice = "system-kerberos-server.slice";
         StateDirectory = "krb5kdc";
       };
